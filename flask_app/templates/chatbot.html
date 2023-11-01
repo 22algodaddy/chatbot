@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <form id="chat-form">
+        <label for="user-input">प्रश्न:</label>
+        <input type="text" id="user-input" name="user_input">
+        <button type="submit">पूछें</button>
+    </form>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').submit(function(event) {
+                event.preventDefault();
+                var user_input = $('#user-input').val();
+                $('#chat-box').append('<div>You: ' + user_input + '</div');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_response',
+                    data: { user_input: user_input },
+                    success: function(data) {
+                        var bot_response = data.bot_response;
+                        $('#chat-box').append('<div>Bot: ' + bot_response + '</div>');
+                    }
+                });
+
+                $('#user-input').val('');
+            });
+        });
+    </script>
+</body>
+</html>
